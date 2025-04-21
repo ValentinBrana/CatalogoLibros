@@ -1,0 +1,9 @@
+﻿@model Libro
+
+<h2> Detalle del libro</h2>
+
+    <h2>@Model.titulo</h2>
+    <p><strong>Año:</strong> @Model.anioPublicacion</p>
+    <p><strong>Autor:</strong> @Model.autor.nombre</p>
+
+<a href =@Url.Action("Index", "Libro") class="btn btn-secondary mt-3">Volver al catalogo</a>

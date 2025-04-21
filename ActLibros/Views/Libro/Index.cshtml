@@ -1,0 +1,42 @@
+﻿@model List<ActLibros.Models.Libro>
+
+<thead>
+    <tr>
+        <th>Portada</th>
+        <th>Título</th>
+
+        <th>Año</th>
+        <th>Autor</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var libro in Model)
+    {
+        <tr>
+            <td>@libro.titulo</td>
+            <td>@libro.anioPublicacion</td>
+            <td>@libro.autor.nombre</td>
+            <td>
+                <img src="@libro.UrlImagen" alt="Portada de @libro.titulo" width="80" />
+            </td>
+        </tr>
+    }
+</tbody>
+	
+
+
+
+
+    <tbody>
+        @foreach (var libro in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("Detalle", "Libro", new { id = libro.id })">@libro.titulo</a>
+                </td>
+                <td>@libro.anioPublicacion</td>
+                <td>@libro.autor.nombre</td>
+            </tr>
+        }
+    </tbody>
+    
