@@ -1,42 +1,154 @@
 ﻿@model List<ActLibros.Models.Libro>
 
-<thead>
-    <tr>
-        <th>Portada</th>
-        <th>Título</th>
-
-        <th>Año</th>
-        <th>Autor</th>
-    </tr>
-</thead>
-<tbody>
-    @foreach (var libro in Model)
-    {
-        <tr>
-            <td>@libro.titulo</td>
-            <td>@libro.anioPublicacion</td>
-            <td>@libro.autor.nombre</td>
-            <td>
-                <img src="@libro.UrlImagen" alt="Portada de @libro.titulo" width="80" />
-            </td>
-        </tr>
+@{
+	ViewData["Title"] = "Catálogo de Libros";
+	var color = ViewBag.ColorFondo as string ?? "white";
+}
+<style>
+		/* Agrega esto a tu CSS o dentro de un bloque <style> en tu vista */
+    body {
+        background-color: @color; /* Usa el color dinámico */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+        color: #333; /* Color de texto general */
+        transition: background-color 0.5s ease; /* Transición suave para el cambio de color */
     }
-</tbody>
-	
 
+    /* Estilos para el título del catálogo */
+    .titulo-catalogo {
+        color: #0056b3; /* Un azul más corporativo */
+        text-align: center; /* Centrar el título */
+        margin-top: 30px;
+        margin-bottom: 40px;
+        font-size: 2.8em; /* Título más grande */
+        font-weight: 700; /* Más negrita */
+        letter-spacing: 1.5px; /* Espaciado entre letras */
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
 
+    /* Estilos para el botón "Agregar Libro" */
+    .btn-primary {
+        background-color: #28a745; /* Un verde más agradable */
+        border-color: #28a745;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px; /* Bordes más redondeados */
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        display: block; /* Para que ocupe su propia línea */
+        width: fit-content; /* Ajustar al contenido */
+        margin: 0 auto 30px auto; /* Centrar y margen inferior */
+    }
 
-
-    <tbody>
-        @foreach (var libro in Model)
-        {
-            <tr>
-                <td>
-                    <a href="@Url.Action("Detalle", "Libro", new { id = libro.id })">@libro.titulo</a>
-                </td>
-                <td>@libro.anioPublicacion</td>
-                <td>@libro.autor.nombre</td>
-            </tr>
+        .btn-primary:hover {
+            background-color: #218838; /* Verde más oscuro al pasar el ratón */
+            border-color: #1e7e34;
+            transform: translateY(-2px); /* Pequeño efecto al pasar el ratón */
         }
-    </tbody>
-    
+
+    /* Estilos para la tabla */
+    .table {
+        width: 90%; /* Ancho un poco más pequeño */
+        margin: 0 auto; /* Centrar la tabla */
+        border-collapse: separate; /* Para que los border-radius funcionen en thead/tbody */
+        border-spacing: 0;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
+        border-radius: 10px; /* Bordes redondeados en la tabla */
+        overflow: hidden; /* Asegura que los bordes redondeados se vean bien */
+    }
+
+        .table thead th {
+            background-color: #007bff; /* Fondo azul para el encabezado */
+            color: white; /* Texto blanco */
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            border-bottom: none; /* Eliminar bordes inferiores del thead */
+        }
+
+        .table tbody tr {
+            background-color: white; /* Fondo blanco para las filas */
+            border-bottom: 1px solid #dee2e6; /* Separador de filas */
+            transition: background-color 0.3s ease;
+        }
+
+            .table tbody tr:hover {
+                background-color: #f8f9fa; /* Color al pasar el ratón por la fila */
+            }
+
+        .table tbody td {
+            padding: 12px 15px;
+            vertical-align: middle; /* Centrar verticalmente el contenido de las celdas */
+        }
+
+        .table img {
+            border-radius: 4px; /* Bordes ligeramente redondeados para las portadas */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Estilos para los enlaces de acciones dentro de la tabla */
+        .table a {
+            color: #007bff; /* Color azul para los enlaces */
+            text-decoration: none; /* Sin subrayado por defecto */
+        }
+
+            .table a:hover {
+                text-decoration: underline; /* Subrayado al pasar el ratón */
+            }
+
+    .color-buttons-container { /* Nueva clase para el contenedor de botones de color */
+        text-align: center;
+        margin-top: 50px;
+        padding-bottom: 30px;
+        display: flex; /* Habilitar flexbox */
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan a la siguiente línea si no caben */
+        justify-content: center; /* Centrar horizontalmente */
+        align-items: center; /* Centrar verticalmente */
+        gap: 15px; /* Espacio entre los botones (nueva propiedad CSS) */
+    }
+
+    .btn-primary2{
+        background-color: cornflowerblue;
+    }
+</style >
+
+<a asp-controller="Libro" asp-action="Crear" class="btn btn-primary">Agregar Libro</a>
+<h2 class="titulo-catalogo">Catálogo de Libros</h2>
+
+<div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Portada</th>
+				<th>Título</th>
+				<th>Año</th>
+				<th>Autor</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var libro in Model)
+			{
+				<tr>
+					<td>
+						<img src="@libro.UrlImagen" alt="Portada de @libro.titulo" width="80" />
+					</td>
+					<td>
+						<a asp-controller="Libro" asp-action="Detalle" asp-route-id="@libro.id">@libro.titulo</a>
+					</td>
+					<td>@libro.anioPublicacion</td>
+					<td><a asp-controller="Libro" asp-action="Autor" asp-route-id="@libro?.autor?.id">@libro?.autor?.nombre</a></td>
+					<td><a href="@Url.Action("Detalle", "Libro", new { id = libro?.id })" class="btn btn-info">Ver detalles</a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<div class="mt-4">
+		<h4>Cambiar color de fondo:</h4>
+        <div class="color-buttons-container">
+            <a class="btn btn-primary2" asp-controller="Libro" asp-action="CambiarFondo" asp-route-color="lightblue">Celeste</a>
+            <a class="btn btn-success" asp-controller="Libro" asp-action="CambiarFondo" asp-route-color="lightgreen">Verde</a>
+            <a class="btn btn-warning" asp-controller="Libro" asp-action="CambiarFondo" asp-route-color="lightyellow">Amarillo</a>
+            <a class="btn btn-secondary" asp-controller="Libro" asp-action="CambiarFondo" asp-route-color="white">Blanco</a>
+        </div>
+		
+	</div>
+</div>

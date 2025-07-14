@@ -1,0 +1,34 @@
+﻿@model ActLibros.Models.Libro
+
+
+<div class="crear-libro-bg">
+    <h2 class="text-azul-sombra mb-4">Crear libro</h2>
+
+@if (ViewBag.mensaje != null)
+{
+	<div class="alert alert-success">@ViewBag.mensaje</div>
+}
+    <form asp-action="Crear" method="post" class="p-4 border rounded shadow bg-light">
+        <div class="form-group mb-3">
+            <label asp-for="autorId" class="form-label">Autor</label>
+            <select asp-for="autorId" asp-items="@(new SelectList(ViewBag.Autores,"id","nombre"))" class="form-select"></select>
+            <span asp-validation-for="autorId" class="text-danger"></span>
+	</div>
+
+	<div class="form-group">
+		<label asp-for="titulo">Título</label>
+		<input asp-for="titulo" class="form-control" />
+		<span asp-validation-for="titulo" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="anioPublicacion">Año de publicación</label>
+		<input asp-for="anioPublicacion" class="form-control" />
+		<span asp-validation-for="anioPublicacion" class="text-danger"></span>
+	</div>
+
+        <!-- <input type="submit" value="Crear" class="btn btn-primary" />  -->
+        <button class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Agregar Libro
+        </button>
+</form>
+</div>
