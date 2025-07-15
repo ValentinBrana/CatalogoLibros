@@ -1,9 +1,10 @@
-﻿@model List<ActLibros.Models.Libro>
+﻿@model ActLibros.Models.Libro
 
 
 @{
 	ViewData["Title"] = "Editar Libro";
 	Layout = "_Layout";
+	<a asp-controller="Libro" asp-action="Editar" asp-route-id="@Model.id" class="btn btn-warning">Editar Libro</a>
 }
 <div class ="crear-libro-bg">
 	<h2 class="text-azul-sombra mb-4">Editar Libro</h2>
@@ -14,6 +15,7 @@
 	}
 
 	<form asp-action="Editar" method="post">
+		
 		<input type="hidden" asp-for="id" />
 		
 		<div class="text-azul-sombra mb-3">
