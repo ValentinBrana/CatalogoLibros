@@ -176,6 +176,24 @@ namespace ActLibros.Controllers
             TempData["Mensaje"] = "Libro editado correctamente";
             return RedirectToAction("Detalle", new { id = libro });
         }
+
+        [HttpPost]
+        public IActionResult Eliminar(int id)
+        {
+            // 1. Encontrar el libro en la lista usando su ID
+            var libro = libros.FirstOrDefault(l => l.id == id);
+
+            if (libro == null)
+            {
+                return NotFound(); // El libro no fue encontrado en la lista
+            }
+
+            // 2. Eliminar el libro de la lista
+            libros.Remove(libro);
+
+            // 3. Redirigir al usuario a la página de inicio que muestra la lista de libros
+            return RedirectToAction("Index");
+        }
     }
 }
 

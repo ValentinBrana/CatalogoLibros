@@ -137,6 +137,7 @@
 					<td>@libro.anioPublicacion</td>
 					<td><a asp-controller="Libro" asp-action="Autor" asp-route-id="@libro?.autor?.id">@libro?.autor?.nombre</a></td>
 					<td><a href="@Url.Action("Detalle", "Libro", new { id = libro?.id })" class="btn btn-info">Ver detalles</a></td>
+
 				</tr>
 			}
 		</tbody>
