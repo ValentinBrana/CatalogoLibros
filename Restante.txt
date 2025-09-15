@@ -1,0 +1,4 @@
+Editar --> campos ya rellenos. 
+En editar esta para poner url imagen, pero en crear no. Unificar 
+Eliminar --> confirmar eliminar
+Base de datos
