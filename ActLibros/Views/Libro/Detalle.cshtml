@@ -1,28 +1,53 @@
 ﻿@model Libro
 
-<h2> Detalle del libro</h2>
+<h2>Detalle del libro</h2>
 
-    <h2>@Model.titulo</h2>
-    <p><strong>Año:</strong> @Model.anioPublicacion</p>
-    <p><strong>Autor:</strong> @Model.autor.nombre</p>
+<h2>@Model.titulo</h2>
+<p><strong>Año:</strong> @Model.anioPublicacion</p>
+<p><strong>Autor:</strong> @Model.autor.nombre</p>
 
-<form asp-action="Editar" asp-controller="Libro" method="post">
-    <div class="diveditar">
+<a asp-action="Editar" asp-controller="Libro" asp-route-id="@Model.id" class="btn btn-danger diveditar">Editar libro</a>
 
-        <input type="hidden" name="id" value="@Model.id" />
-        <button type="submit" class="btn btn-danger">Editar libro</button>
-    </div>
-</form>
-
-
-<form asp-action="Eliminar" asp-controller="Libro" method="post">
+<form asp-action="Eliminar" asp-controller="Libro" method="post" onsubmit="return confirmarEliminar();">
     <input type="hidden" name="id" value="@Model.id" />
     <button type="submit" class="btn btn-danger">Eliminar Libro</button>
 </form>
-<a href =@Url.Action("Index", "Libro") class="btn btn-secondary mt-3">Volver al catalogo</a>
+
+<a href="@Url.Action("Index", "Libro")" class="btn btn-secondary mt-3">Volver al catalogo</a>
 
 <style>
     .diveditar {
         margin-bottom: 10px;
     }
 </style>
+
+@section Scripts {
+    <script>
+        function confirmarEliminar() {
+            return confirm("¿Estás seguro de que quieres eliminar este libro?");
+        }
+    </script>
+}
+@* @model Libro
+
+<h2> Detalle del libro</h2>
+
+<h2>@Model.titulo</h2>
+<p><strong>Año:</strong> @Model.anioPublicacion</p>
+<p><strong>Autor:</strong> @Model.autor.nombre</p>
+
+<a asp-action="Editar" asp-controller="Libro" asp-route-id="@Model.id" class="btn btn-danger diveditar">Editar libro</a>
+
+
+<form asp-action="Eliminar" asp-controller="Libro" method="post">
+    <input type="hidden" name="id" value="@Model.id" />
+    <button type="submit" class="btn btn-danger">Eliminar Libro</button>
+</form>
+<a href=@Url.Action("Index", "Libro") class="btn btn-secondary mt-3">Volver al catalogo</a>
+
+<style>
+    .diveditar {
+        margin-bottom: 10px;
+    }
+</style> *@
+

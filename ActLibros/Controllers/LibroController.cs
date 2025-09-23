@@ -1,5 +1,6 @@
 ﻿using ActLibros.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace ActLibros.Controllers
 {
@@ -40,26 +41,23 @@ namespace ActLibros.Controllers
 
         public IActionResult Index()
         {
-            // *** ¡Aquí está la clave! ***
-            // Recupera el color de TempData si existe y asígnalo a ViewBag.
+           
             if (TempData["ColorFondo"] != null)
             {
                 ViewBag.ColorFondo = TempData["ColorFondo"].ToString();
             }
             else
             {
-                ViewBag.ColorFondo = "white"; // Color por defecto si no hay ninguno en TempData
+                ViewBag.ColorFondo = "white"; 
             }
 
-            // Aquí deberías obtener tus libros de la base de datos o servicio
-            // Por ahora, usaremos la lista estática de ejemplo
-            return View(libros); // Pasa tus libros a la vista
+            return View(libros); 
         }
 
         public IActionResult Detalle(int id)
         {
             ViewBag.ColorFondo = TempData["ColorFondo"] ?? "white";
-            TempData.Keep("ColorFondo"); // mantiene TempData para futuras páginas
+            TempData.Keep("ColorFondo"); 
             var libroSeleccionado = libros.FirstOrDefault(l => l.id == id);
             if (libroSeleccionado == null)
             {
@@ -73,7 +71,7 @@ namespace ActLibros.Controllers
         public IActionResult Autor(int id)
         {
             ViewBag.ColorFondo = TempData["ColorFondo"] ?? "white";
-            TempData.Keep("ColorFondo"); // mantiene TempData para futuras páginas
+            TempData.Keep("ColorFondo"); 
             var libros = ObtenerLibros();
             var librosAutor = libros.Where(l => l?.autor?.id == id).ToList();
 
@@ -95,7 +93,7 @@ namespace ActLibros.Controllers
         [HttpGet]
         public IActionResult Crear()
         {
-            ViewBag.Autores = ObtenerAutores(); // método que devuelve lista de autores
+            ViewBag.Autores = ObtenerAutores(); 
             return View();
         }
 
@@ -119,8 +117,8 @@ namespace ActLibros.Controllers
             }
 
             libro.autor = autorSeleccionado;
-            libro.id = ObtenerLibros().Any() ? ObtenerLibros().Max(l => l.id) + 1 : 1; // Asignar un nuevo ID
-            ObtenerLibros().Add(libro); // Simular almacenamiento
+            libro.id = ObtenerLibros().Any() ? ObtenerLibros().Max(l => l.id) + 1 : 1; 
+            ObtenerLibros().Add(libro); 
 
             TempData["Mensaje"] = $"libro '{libro.titulo}' creado con éxito.";
 
@@ -148,50 +146,96 @@ namespace ActLibros.Controllers
             ViewBag.Autores = ObtenerAutores();
             return View(libro);
         }
-
         [HttpPost]
         public IActionResult Editar(Libro libro)
         {
             ModelState.Remove("autor");
+
+            if (string.IsNullOrEmpty(libro.titulo))
+            {
+                ModelState.AddModelError("titulo", "El título no puede estar vacío.");
+                ViewBag.Autores = ObtenerAutores();
+                return View(libro);
+            }
+
+            string patronTitulo = @"^[a-zA-Z0-9\s]+$";
+
+            if (!Regex.IsMatch(libro.titulo, patronTitulo))
+            {
+                ModelState.AddModelError("titulo", "El título solo puede contener letras, números y espacios.");
+            }
+
+            
             if (!ModelState.IsValid)
             {
                 ViewBag.Autores = ObtenerAutores();
-
                 return View(libro);
             }
+
+            
             var libroExistente = ObtenerLibros().FirstOrDefault(l => l.id == libro.id);
             if (libroExistente == null)
             {
                 return NotFound();
             }
-            
+
             libroExistente.titulo = libro.titulo;
             libroExistente.anioPublicacion = libro.anioPublicacion;
             libroExistente.UrlImagen = libro.UrlImagen;
+
             var autorSeleccionado = ObtenerAutores().FirstOrDefault(a => a.id == libro.autorId);
             if (autorSeleccionado != null)
             {
                 libroExistente.autor = autorSeleccionado;
             }
+
             TempData["Mensaje"] = "Libro editado correctamente";
-            return RedirectToAction("Detalle", new { id = libro });
+            return RedirectToAction("Detalle", new { id = libro.id });
         }
+
+        //[HttpPost]
+        //public IActionResult Editar(Libro libro)
+        //{
+        //    ModelState.Remove("autor");
+        //    if (!ModelState.IsValid)
+        //    {
+        //        ViewBag.Autores = ObtenerAutores();
+
+        //        return View(libro);
+        //    }
+        //    var libroExistente = ObtenerLibros().FirstOrDefault(l => l.id == libro.id);
+        //    if (libroExistente == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    libroExistente.titulo = libro.titulo;
+        //    libroExistente.anioPublicacion = libro.anioPublicacion;
+        //    libroExistente.UrlImagen = libro.UrlImagen;
+        //    var autorSeleccionado = ObtenerAutores().FirstOrDefault(a => a.id == libro.autorId);
+        //    if (autorSeleccionado != null)
+        //    {
+        //        libroExistente.autor = autorSeleccionado;
+        //    }
+        //    TempData["Mensaje"] = "Libro editado correctamente";
+        //    return RedirectToAction("Detalle", new { id = libro });
+        //}
 
         [HttpPost]
         public IActionResult Eliminar(int id)
         {
-            // 1. Encontrar el libro en la lista usando su ID
+            
             var libro = libros.FirstOrDefault(l => l.id == id);
 
             if (libro == null)
             {
-                return NotFound(); // El libro no fue encontrado en la lista
+                return NotFound(); 
             }
 
-            // 2. Eliminar el libro de la lista
+            
             libros.Remove(libro);
 
-            // 3. Redirigir al usuario a la página de inicio que muestra la lista de libros
+            
             return RedirectToAction("Index");
         }
     }

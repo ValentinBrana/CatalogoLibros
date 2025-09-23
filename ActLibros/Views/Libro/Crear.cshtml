@@ -1,5 +1,62 @@
 ﻿@model ActLibros.Models.Libro
 
+@{
+    ViewData["Title"] = "Crear Libro";
+    Layout = "_Layout";
+}
+
+<div class="crear-libro-bg">
+    <h2 class="text-azul-sombra mb-4">Crear Libro</h2>
+
+    @if (ViewBag.mensaje != null)
+    {
+        <div class="alert alert-success">@ViewBag.mensaje</div>
+    }
+
+    <form asp-action="Crear" method="post">
+
+        <div class="text-azul-sombra mb-3">
+            <label asp-for="titulo"></label>
+            <input asp-for="titulo" class="form-control" />
+            <span asp-validation-for="titulo" class="text-danger"></span>
+        </div>
+
+        <div class="text-azul-sombra mb-3">
+            <label asp-for="anioPublicacion"></label>
+            <input asp-for="anioPublicacion" class="form-control" />
+            <span asp-validation-for="anioPublicacion" class="text-danger"></span>
+        </div>
+
+        <div class="text-azul-sombra mb-3">
+            <label for="autor">Autor</label>
+            <select asp-for="autorId" class="form-select">
+                @foreach (var autor in ViewBag.Autores as List<Autor>)
+                {
+                    <option value="@autor.id">
+                        @autor.nombre
+                    </option>
+                }
+            </select>
+            <span asp-validation-for="autorId" class="text-danger"></span>
+        </div>
+
+        <div class="text-azul-sombra mb-3">
+            <label asp-for="UrlImagen">URL de la Imagen</label>
+            <input asp-for="UrlImagen" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Crear Libro
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">Volver al catálogo</a>
+    </form>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</div>
+@* @model ActLibros.Models.Libro
+
 
 <div class="crear-libro-bg">
     <h2 class="text-azul-sombra mb-4">Crear libro</h2>
@@ -26,9 +83,10 @@
 		<span asp-validation-for="anioPublicacion" class="text-danger"></span>
 	</div>
 
-        <!-- <input type="submit" value="Crear" class="btn btn-primary" />  -->
+        
         <button class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Agregar Libro
         </button>
 </form>
 </div>
+ *@
