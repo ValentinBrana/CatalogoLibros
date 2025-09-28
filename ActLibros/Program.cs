@@ -1,8 +1,14 @@
+using ActLibros.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<LibrosDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionLibros"))
+);
 
 var app = builder.Build();
 
@@ -26,3 +32,6 @@ app.MapControllerRoute(
     pattern: "{controller=Libro}/{action=Index}/{id?}");
 
 app.Run();
+
+
+
