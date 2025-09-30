@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ActLibros.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace ActLibros.Models
 {
@@ -27,3 +28,4 @@ namespace ActLibros.Models
         public int autorId { get; set; }
     }
 }
+
