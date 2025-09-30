@@ -106,8 +106,7 @@ namespace ActLibros.Controllers
                 ViewBag.Autores = ObtenerAutores();
                 return View(libro);
             }
-            // Simular almacenamiento del libro
-            // libros.Add(libro);
+
             var autorSeleccionado = ObtenerAutores().FirstOrDefault(a => a.id == libro.autorId);
             if (autorSeleccionado == null)
             {
@@ -116,6 +115,7 @@ namespace ActLibros.Controllers
                 return View(libro);
             }
 
+            
             libro.autor = autorSeleccionado;
             libro.id = ObtenerLibros().Any() ? ObtenerLibros().Max(l => l.id) + 1 : 1; 
             ObtenerLibros().Add(libro); 
